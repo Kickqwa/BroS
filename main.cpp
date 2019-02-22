@@ -37,6 +37,7 @@ public:
 	string name_role;
 	//int elections();
 	void deck_building();
+	void delete_law();
 };
 
 
@@ -108,8 +109,6 @@ void role::choice_role() {
 					fucked = true;
 			}
 		} while (fucked == true);
-
-
 		name_role = plrs[i];
 		used_role[used_num] = test_role;
 		used_num++;
@@ -128,8 +127,17 @@ void role::deck_building() {
 					fucked = true;
 			}
 		} while (fucked == true);
-
+		add_law(test_role);
+		used_laws[used_role_num] = test_role;
+		used_role_num++;
 	}
+}
+
+void role::delete_law() {
+	gg* c = new gg();
+	c = tail;
+	tail = tail->prev;
+	delete c;
 }
 
 /*
