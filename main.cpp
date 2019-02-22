@@ -177,16 +177,8 @@ int main() {
 	role r;
 	r.choice_role();
 	r.print();
-<<<<<<< HEAD
 	r.elections();
 	//17 законов (11 fashicst, 6 liberal)
-=======
-
-
-
-	//17 законов
-	/////////////////
->>>>>>> 67911151fe043ff771ba819566f9e6770f4d778b
 	system("PAUSE");
 	return 0;
 }
