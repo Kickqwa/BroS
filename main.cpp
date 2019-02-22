@@ -12,20 +12,37 @@ struct gg {
 	gg* prev;
 };
 
-class g_list {
+class role {
 public:
-	g_list();
-	~g_list();
-	gg* head; // Первый элемент (голова) списка
-	gg* tail; // Последний элемент (хвост) списка
+	role();
+	~role();
+	gg* head;
+	gg* tail;
+	gg* head_l;
+	gg* tail_l;
 	bool chk_empty();
-	void comp_in(string n, int r);
+	void add_player(string n, int r);
+	void add_law(int r);
 	void print();
+	int laws[17] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 }; //0 - fash; 1 - lib
+	int used_laws[17];
+	int used_role_num = 0;
+	int roles[7] = { 0, 1, 2, 3, 4, 5, 6 }; //0-hit;1-2-red;3-6-blue
+	int used_role[7];
+	const char* plrs[7] = { "p1", "p2", "p3", "p4", "p5", "p6", "p7" };
+	int test_role;
+	int used_num = 0;
+	bool fucked;
+	void choice_role();
+	string name_role;
+	//int elections();
+	void deck_building();
 };
 
-g_list::g_list() : head(nullptr), tail(nullptr) {}
 
-g_list::~g_list() {
+role::role() : head(nullptr), tail(nullptr) {}
+
+role::~role() {
 	while (head != 0) {
 		gg* c = head;
 		head = head->next;
@@ -33,16 +50,11 @@ g_list::~g_list() {
 	}
 }
 
-bool g_list::chk_empty()
-{
-	return (head == nullptr);
-}
-
-void g_list::comp_in(string n, int r) {
+void role::add_player(string n, int r) {
 	gg* c = new gg();
 	c->name = n;
 	c->role = r;
-	if (chk_empty()) {
+	if (head == nullptr) {
 		c->next = nullptr;
 		c->prev = nullptr;
 		head = c;
@@ -57,7 +69,25 @@ void g_list::comp_in(string n, int r) {
 	}
 }
 
-void g_list::print() {
+void role::add_law(int l) {
+	gg* c = new gg();
+	c->role = l;
+	if ((head_l == nullptr)) {
+		c->next = nullptr;
+		c->prev = nullptr;
+		head_l = c;
+		tail_l = c;
+	}
+	else {
+		tail_l->next = c;
+		c->prev = tail_l;
+		tail_l = c;
+		tail_l->next = head_l;
+		head_l->prev = tail_l;
+	}
+}
+
+void role::print() {
 	gg* c = new gg();
 	c = head;
 	do {
@@ -66,20 +96,6 @@ void g_list::print() {
 		c = c->next;
 	} while (c != head);
 }
-
-class role : public g_list
-{
-public:
-	int roles[7] = { 0, 1, 2, 3, 4, 5, 6 }; //0-hit;1-2-red;3-6-blue
-	int used_role[7];
-	const char* plrs[7] = { "p1", "p2", "p3", "p4", "p5", "p6", "p7" };
-	int test_role;
-	int used_num = 0;
-	bool fucked;
-	void choice_role();
-	string name_role;
-	int elections();
-};
 
 //Расспределение ролей между игроками
 void role::choice_role() {
@@ -97,11 +113,24 @@ void role::choice_role() {
 		name_role = plrs[i];
 		used_role[used_num] = test_role;
 		used_num++;
-		comp_in(name_role, test_role);
+		add_player(name_role, test_role);
 	}
 }
 
+//Колода законов
+void role::deck_building() {
+	for (int i = 0; i < 17; i++) {
+		do {
+			fucked = false;
+			test_role = roles[rand() % 17];
+			for (int j = 0; j < used_role_num; j++) {
+				if (test_role == used_role[j])
+					fucked = true;
+			}
+		} while (fucked == true);
 
+	}
+}
 
 /*
 int role::elections()
