@@ -35,7 +35,9 @@ public:
 	bool fucked;
 	void choice_role();
 	string name_role;
-	//int elections();
+	int elections();
+	gg* president;
+	gg* cancler;
 	void deck_building();
 	void delete_law();
 };
@@ -140,19 +142,33 @@ void role::delete_law() {
 	delete c;
 }
 
-/*
+//Выборы 
 int role::elections()
 {
-	gg* c = new gg();
-	c = head;
-	string firts_steper;
-	bool ya = 1, nei = 0;
-	int firts_steper = rand() % 10;
-	for (int i = 0; i < firts_steper; i++)
-		c = r.head->next;
-
+	president = head;
+	bool yah = 1, nein = 0;
+	int choice_player;
+	int first_steper = rand() % 7;
+	for (int i = 0; i < first_steper; i++) {
+		president = president->next;
+	}
+	cancler = president;
+	cout << endl << "\t\tТоварищ президент был определён: " << president->name << endl;
+	cout << "1 - " << president->next->name << endl;
+	cout << "2 - " << president->next->next->name << endl;
+	cout << "3 - " << president->next->next->next->name << endl;
+	cout << "4 - " << president->prev->prev->prev->name << endl;
+	cout << "5 - " << president->prev->prev->name << endl;
+	cout << "6 - " << president->prev->name << endl;
+	cout << "Введите номер игрока, которого хотите сделать канцлером: ";
+	cin >> choice_player;
+	for (int i = 0; i < choice_player; i++)
+	{
+		cancler = cancler->next;
+	}
+	cout << "Канцлер: " << cancler->name << endl;
+	return 9;
 }
-*/
 
 int main() {
 	setlocale(LC_ALL, "Rus");
@@ -161,11 +177,8 @@ int main() {
 	role r;
 	r.choice_role();
 	r.print();
-
-
-
-	//17 законов
-
+	r.elections();
+	//17 законов (11 fashicst, 6 liberal)
 	system("PAUSE");
 	return 0;
 }
