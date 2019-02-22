@@ -20,10 +20,7 @@ public:
 	gg* tail; // Последний элемент (хвост) списка
 	bool chk_empty();
 	void comp_in(string n, int r);
-	//gg* search(string n);
-	//void comp_edit(gg &c, int* r);
-	//void print();
-	//void comp_del(gg* c);	
+	void print();
 };
 
 g_list::g_list() : head(nullptr), tail(nullptr) {}
@@ -60,6 +57,16 @@ void g_list::comp_in(string n, int r) {
 	}
 }
 
+void g_list::print() {
+	gg* c = new gg();
+	c = head;
+	do {
+		cout << "Name - " << c->name << endl;
+		cout << "Role - " << c->role << endl << endl;
+		c = c->next;
+	} while (c != head);
+}
+
 class role : public g_list
 {
 public:
@@ -71,8 +78,10 @@ public:
 	bool fucked;
 	void choice_role();
 	string name_role;
+	int elections();
 };
 
+//Расспределение ролей между игроками
 void role::choice_role() {
 	for (int i = 0; i < 7; i++) {
 		do {
@@ -83,16 +92,19 @@ void role::choice_role() {
 					fucked = true;
 			}
 		} while (fucked == true);
-    name_role = plrs[i];
+
+
+		name_role = plrs[i];
 		used_role[used_num] = test_role;
 		used_num++;
 		comp_in(name_role, test_role);
-		cout << name_role << endl << test_role << endl << endl;
 	}
 }
 
 
-int elections() 
+
+/*
+int role::elections()
 {
 	gg* c = new gg();
 	c = head;
@@ -103,14 +115,17 @@ int elections()
 		c = r.head->next;
 
 }
+*/
 
 int main() {
 	setlocale(LC_ALL, "Rus");
 	srand((unsigned)time(NULL));
 
-	g_list g;
 	role r;
 	r.choice_role();
+	r.print();
+
+
 
 	//17 законов
 
