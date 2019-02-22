@@ -40,6 +40,7 @@ public:
 	gg* cancler;
 	void deck_building();
 	void delete_law();
+	void passing_laws();
 };
 
 
@@ -170,6 +171,11 @@ int role::elections()
 	return 9;
 }
 
+//Принятие законов
+void role::passing_laws() {
+
+}
+
 int main() {
 	setlocale(LC_ALL, "Rus");
 	srand((unsigned)time(NULL));
@@ -178,7 +184,7 @@ int main() {
 	r.choice_role();
 	r.print();
 	r.elections();
-	//17 законов (11 fashicst, 6 liberal)пизда
+	//17 законов (11 fashicst, 6 liberal)
 	system("PAUSE");
 	return 0;
 }
