@@ -178,7 +178,7 @@ int main() {
 	r.choice_role();
 	r.print();
 	r.elections();
-	//17 законов (11 fashicst, 6 liberal)
+	//17 законов (11 fashicst, 6 liberal)пизда
 	system("PAUSE");
 	return 0;
 }
