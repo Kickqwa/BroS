@@ -43,12 +43,21 @@ public:
 	void add_player(string n, int r);
 	void add_law(int r);
 	void print();
+
+	//------LAWS------
+	void rep_mass(int t_r);
+	int len = 17;
+	int laws_num[17] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17 };
 	int laws[17] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1 }; //0 - fash; 1 - lib
 	int used_laws[17];
+	int test_law;
 	int used_role_num = 0;
+	//-----------------
+
+	//------Players------
+	const char* plrs[7] = { "p1", "p2", "p3", "p4", "p5", "p6", "p7" };
 	int roles[7] = { 0, 1, 2, 3, 4, 5, 6 }; //0-hitler;1-2-red;3-6-blue
 	int used_role[7];
-	const char* plrs[7] = { "p1", "p2", "p3", "p4", "p5", "p6", "p7" };
 	int test_role;
 	int used_num = 0;
 	bool fucked;
@@ -68,13 +77,14 @@ public:
 	void chk_fash_law(gg* first_card, gg* second_card, gg* third_card, int res_law);
 	void pres_get_law();
 	void cans_get_law(int res_law);
-	gg* first_card = new gg;
-	gg* second_card = new gg;
-	gg* third_card = new gg;
+	gg* first_card;
+	gg* second_card;
+	gg* third_card;
+	int res_law;
 };
 
 
-role::role() : head(nullptr), tail(nullptr) {}
+role::role() : head(nullptr), tail(nullptr), head_l(nullptr), tail_l(nullptr) {}
 
 role::~role() {
 	while (head != 0) {
@@ -103,22 +113,6 @@ void role::add_player(string n, int r) {
 	}
 }
 
-void role::add_law(int l) {
-	gg* c = new gg();
-	c->role = l;
-	if ((head_l == nullptr)) {
-		c->next = nullptr;
-		c->prev = nullptr;
-		head_l = c;
-		tail_l = c;
-	}
-	else {
-		head_l->next = c;
-		head_l = c;
-		//head -> next -> next -> tail -> nullptr;
-		//Последний пришел - первый ушел;
-	}
-}
 
 void role::print() {
 	gg* c = new gg();
@@ -148,20 +142,39 @@ void role::choice_role() {
 	}
 }
 
+void role::add_law(int l) {
+	gg* new_law = new gg;
+	new_law->role = l;
+	if ((head_l == nullptr)) {
+		new_law->next = nullptr;
+		new_law->prev = nullptr;
+		head_l = new_law;
+		tail_l = new_law;
+	}
+	else {
+		head_l->next = new_law;
+		new_law->prev = head_l;
+		head_l = new_law;
+		//tail -> next -> next -> head -> nullptr;
+		//Последний пришел - первый ушел;
+	}
+}
+
+//Сдвиг в массиве
+void role::rep_mass(int t_r) {
+	for (int j = t_r - 1; j < len; ++j) {
+		laws_num[j] = laws_num[j + 1];
+	}
+}
+
 //Колода законов
-void role::deck_building() {
-	for (int i = 0; i < 17; i++) {
-		do {
-			fucked = false;
-			test_role = roles[rand() % 17];
-			for (int j = 0; j < used_role_num; j++) {
-				if (test_role == used_role[j])
-					fucked = true;
-			}
-		} while (fucked == true);
-		add_law(test_role);
-		used_laws[used_role_num] = test_role;
-		used_role_num++;
+void role::deck_building() {					//laws_num - порядковые номера законов
+	int test;									//len - колличество неиспользованных порядковых номеров
+	while (len > 1) {							//test - случайное сисло (от 0 до 16)
+		test = rand() % len;
+		add_law(laws[laws_num[test]]);
+		--len;
+		rep_mass(test);
 	}
 }
 
@@ -298,7 +311,6 @@ void role::chk_fash_law(gg* first_card, gg* second_card, gg* third_card, int res
 
 void role::pres_get_law() {
 
-	int res_law;
 
 	first_card = head_l;
 	delete_law();
@@ -309,7 +321,8 @@ void role::pres_get_law() {
 
 	chk_fash_law(first_card, second_card, third_card, 0);
 
-	cout << "Удаляй закон, мудила!!(("; cin >> res_law;
+	cout << "Удаляй закон, мудила!!((" << endl;
+	cin >> res_law;
 
 	system("pause");
 	system("cls");
@@ -320,7 +333,8 @@ void role::pres_get_law() {
 
 void role::cans_get_law(int res_law) {
 	int resed_law;
-	cout << "Выбирай закон, мудила!!(("; cin >> resed_law;
+	cout << "Выбирай закон, мудила!!((" << endl;
+	cin >> resed_law;
 	if (resed_law == 1) {
 		if (resed_law != res_law) {
 			if (first_card->role == 0) {
@@ -338,10 +352,10 @@ void role::cans_get_law(int res_law) {
 	else if (resed_law == 2 && resed_law != res_law) {
 		if (resed_law != res_law) {
 			if (second_card->role == 0) {
-				//+1 фаш закон
+				cout << "+1 фаш закон" << endl;
 			}
 			else {
-				//+1 либ закон
+				cout << "+1 либ закон" << endl;
 			}
 		}
 		else {
@@ -352,10 +366,10 @@ void role::cans_get_law(int res_law) {
 	else if (resed_law == 3 && resed_law != res_law) {
 		if (resed_law != res_law) {
 			if (third_card->role == 0) {
-				//+1 фаш закон
+				cout << "+1 фаш закон" << endl;
 			}
 			else {
-				//+1 либ закон
+				cout << "+1 либ закон" << endl;
 			}
 		}
 		else {
@@ -369,12 +383,14 @@ int main()
 {
 	setlocale(LC_ALL, "Rus");
 	srand((unsigned)time(NULL));
-	start();
+	//start();
 	role r;
+	r.deck_building();
 	r.choice_role();		//17 законов (11 fashicst, 6 liberal)
 	//r.print();
 	r.take_pres();
 	r.elections();
+	r.pres_get_law();
 
 	system("PAUSE");
 	return 0;
