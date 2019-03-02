@@ -391,6 +391,7 @@ int main()
 	r.take_pres();
 	r.elections();
 	r.pres_get_law();
+	cout << "end!!!" << endl;
 
 	system("PAUSE");
 	return 0;
